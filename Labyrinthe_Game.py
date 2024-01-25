@@ -1,6 +1,7 @@
 # Example file showing a circle moving on screen
 import pygame
 import random
+from Labyrinthe import Labyrinthe
 # pygame setup
 pygame.init()
 
@@ -27,6 +28,9 @@ show_pos = False
 keys= { "UP":0 , "DOWN":0, "LEFT":0, "RIGHT":0 }
 
 player_pos = pygame.Vector2(round(size[0]/8), round(size[1]/2))
+
+map = Labyrinthe(20, 10, 'Map1.csv', pygame.Color('black'))
+map.readFile()
 
 #tour de boucle, pour chaque FPS
 while running:
@@ -99,6 +103,10 @@ while running:
         if show_pos:
             print("pos: ",player_pos)
 
+
+    # Load Labyrinthe
+    map.drawMap(screen, tilesize)
+    pygame.draw.rect(screen, player_color, pygame.Rect(player_pos.x * tilesize, player_pos.y * tilesize, tilesize, tilesize))
 
     # affichage des différents composants
     if show_grid:
