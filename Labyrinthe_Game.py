@@ -22,12 +22,12 @@ screen = pygame.display.set_mode((size[0]*tilesize, size[1]*tilesize))
 clock = pygame.time.Clock()
 running = True
 dt = 0
-show_grid = True
+show_grid = False
 show_pos = False
 
 keys= { "UP":0 , "DOWN":0, "LEFT":0, "RIGHT":0 }
 
-player_pos = pygame.Vector2(round(size[0]/8), round(size[1]/2))
+player_pos = pygame.Vector2(0, 1)
 
 map = Labyrinthe(20, 10, 'Map1.csv', pygame.Color('black'))
 map.readFile()
