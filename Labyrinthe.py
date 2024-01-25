@@ -8,19 +8,25 @@ class Labyrinthe:
         self.filename = filename
         self.color = color
         self.matrice = []
+        self.player_start_position = None
 
     def readFile(self):
         with open(self.filename, newline='') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-            for row in spamreader:
+            for i, row in enumerate(spamreader):
                 row_list = [int(cell) for cell in row]
                 self.matrice.append(row_list)
+                if 2 in row_list:
+                    self.player_start_position = (row_list.index(2), i)
 
     def drawMap(self, screen, tilesize):
         for i in range(len(self.matrice)):
             for j in range(len(self.matrice[i])):
                 if self.matrice[i][j] == 1:
                     pygame.draw.rect(screen, self.color, pygame.Rect(j * tilesize, i * tilesize, tilesize, tilesize))
+
+    def hitBox(self, x, y):
+        return self.matrice[y][x] == 1
 
     def affiche(self):
         for j in range(self.sizeY):
@@ -31,6 +37,7 @@ class Labyrinthe:
     def afficherMap(self):
         for row in self.matrice:
             print(row)
+
 
     def get_matrice(self):
         return self.matrice

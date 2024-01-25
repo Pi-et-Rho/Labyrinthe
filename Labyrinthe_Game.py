@@ -18,19 +18,20 @@ grid_color = "#7F513D"
 player_color = "#9F715D"
 
 
-screen = pygame.display.set_mode((size[0]*tilesize, size[1]*tilesize))
+screen = pygame.display.set_mode((size[0] * tilesize, size[1] * tilesize))
 clock = pygame.time.Clock()
 running = True
 dt = 0
 show_grid = False
 show_pos = False
 
-keys= { "UP":0 , "DOWN":0, "LEFT":0, "RIGHT":0 }
+keys = {"UP": 0, "DOWN": 0, "LEFT": 0, "RIGHT": 0}
 
-player_pos = pygame.Vector2(0, 1)
-
+# Utilisez la position initiale du joueur à partir de la classe Labyrinthe
 map = Labyrinthe(20, 10, 'Map1.csv', pygame.Color('black'))
 map.readFile()
+
+player_pos = pygame.Vector2(map.player_start_position[0], map.player_start_position[1])
 
 #tour de boucle, pour chaque FPS
 while running:
@@ -76,29 +77,25 @@ while running:
 
     next_move += dt
     # gestion des déplacements
-    if next_move>0:
+    if next_move > 0:
+        new_x, new_y = int(player_pos.x), int(player_pos.y)
+
         if keys['UP'] == 1:
-            player_pos.y -= 1
-            next_move = -player_speed
+            new_y -= 1
         elif keys['DOWN'] == 1:
-            player_pos.y += 1
-            next_move = -player_speed
+            new_y += 1
         elif keys['LEFT'] == 1:
-            player_pos.x -= 1
-            next_move = -player_speed
+            new_x -= 1
         elif keys['RIGHT'] == 1:
-            player_pos.x += 1
-            next_move = -player_speed
+            new_x += 1
 
         # vérification du déplacement du joueur
-        if player_pos.y < 0:
-            player_pos.y = 0
-        if player_pos.y >= size[1]:
-            player_pos.y = size[1]-1
-        if player_pos.x < 0:
-            player_pos.x = 0
-        if player_pos.x > size[0]-1:
-            player_pos.x = size[0]-1
+        if not map.hitBox(new_x, new_y):
+            player_pos.x, player_pos.y = new_x, new_y
+            next_move = -player_speed
+        else:
+            # Le joueur ne peut pas se déplacer sur un mur
+            next_move = 0
 
         if show_pos:
             print("pos: ",player_pos)
