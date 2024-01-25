@@ -3,10 +3,13 @@ import csv
 
 class Labyrinthe:
     # constructeur
-    def __init__(self, sizeX, sizeY):
+    def __init__(self, sizeX, sizeY, filename):
         """sizeX, sizeY désignent la taille du labyrinthe sur l'axe (x,y)"""
         self.sizeX = sizeX
         self.sizeY = sizeY
+        self.filename = filename
+        self.map = []
+
         #attention création d'une matrice en Y X
         self.matrice = [ [0]* self.sizeX for _ in range(self.sizeY) ]
 
@@ -18,6 +21,19 @@ class Labyrinthe:
                 print(self.matrice[j][i], end = "")
             print()
         #print(self.matrice)
+            
+    def readFile(self):
+        """Lis les différentes Maps"""
+        with open(self.filename, newline = '') as csvfile:
+            spamreader = csv.reader(csvfile, delimiter = ',', quotechar = '|')
+            for row in spamreader:
+                row_list = [int(cell) for cell in row]
+                self.map.append(row_list)
+
+    def afficherMap(self):
+        """Affiche les différentes Maps"""
+        for row in self.map:
+            print(row)
 
     def get_matrice(self):
         """renvoie la matrice associée au labyrinthe"""
@@ -40,7 +56,7 @@ class Labyrinthe:
         self.matrice[j][i]=0
 
 
-laby = Labyrinthe(12,5)
+laby = Labyrinthe(12,5, 'Map1.csv')
 laby.setXY(5,2,1)
 print(laby.getSize())
 laby.affiche()
@@ -59,3 +75,6 @@ lst.append(l3)
 print(lst)
 
 print(lst[2][1])
+
+laby.readFile()
+laby.afficherMap()
